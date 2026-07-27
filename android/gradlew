@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+GRADLE_VERSION=9.4.1
+PROJECT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+CACHE_ROOT="${GRADLE_USER_HOME:-$HOME/.gradle}/wrapper/dists/gradle-${GRADLE_VERSION}-bin"
+INSTALL_DIR="$CACHE_ROOT/gradle-${GRADLE_VERSION}"
+ARCHIVE="$CACHE_ROOT/gradle-${GRADLE_VERSION}-bin.zip"
+
+if [ ! -x "$INSTALL_DIR/bin/gradle" ]; then
+  mkdir -p "$CACHE_ROOT"
+  if [ ! -f "$ARCHIVE" ]; then
+    echo "Downloading Gradle ${GRADLE_VERSION}…" >&2
+    curl -fL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o "$ARCHIVE"
+  fi
+  unzip -q -o "$ARCHIVE" -d "$CACHE_ROOT"
+fi
+
+exec "$INSTALL_DIR/bin/gradle" -p "$PROJECT_DIR" "$@"
+

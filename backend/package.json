@@ -1,0 +1,14 @@
+{
+  "name": "medialab-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependency-free local API for the MediaLab concurrency practice apps",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test src/server.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+
