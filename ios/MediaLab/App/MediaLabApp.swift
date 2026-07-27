@@ -4,7 +4,7 @@ import SwiftUI
 struct MediaLabApp: App {
     var body: some Scene {
         WindowGroup {
-            Color.clear
+            HomeView()
         }
     }
 }

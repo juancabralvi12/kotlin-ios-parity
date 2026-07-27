@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CC93506B9916AFE19DCA2CA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3474F4260416B49486D5CB3 /* HomeView.swift */; };
 		6845E41115D63174C2EE21F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607C104CCB809E37B412D0B6 /* Assets.xcassets */; };
 		706979752830A549BB23A449 /* MediaLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968AE4D4824CB0FBD5B8ADA4 /* MediaLabApp.swift */; };
 		9F93D6F648A1F23963CF2791 /* BootstrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4731DFF5C7C56027D3B075 /* BootstrapTests.swift */; };
@@ -18,6 +19,7 @@
 		607C104CCB809E37B412D0B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91EF18E5FC6F4E62FE8E0C61 /* MediaLab.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MediaLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		968AE4D4824CB0FBD5B8ADA4 /* MediaLabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLabApp.swift; sourceTree = "<group>"; };
+		A3474F4260416B49486D5CB3 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -67,12 +69,13 @@
 		8C51A4BF826683A44403576E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				A3474F4260416B49486D5CB3 /* HomeView.swift */,
 				968AE4D4824CB0FBD5B8ADA4 /* MediaLabApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
 		};
-		"TEMP_2AEB9B2B-5F4B-470A-ACDB-035E326D7AE9" /* Features */ = {
+		"TEMP_9950D61B-4A0B-44B2-8F4B-0836CB80F99B" /* Features */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -172,6 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1CC93506B9916AFE19DCA2CA /* HomeView.swift in Sources */,
 				706979752830A549BB23A449 /* MediaLabApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
