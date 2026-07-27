@@ -6,6 +6,5 @@ android/.gradle/
 android/local.properties
 android/**/build/
 ios/DerivedData/
+ios/*.xcodeproj/
 ios/*.xcworkspace/xcuserdata/
-ios/*.xcodeproj/xcuserdata/
-

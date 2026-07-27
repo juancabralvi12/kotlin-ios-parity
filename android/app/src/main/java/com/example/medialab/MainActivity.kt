@@ -9,17 +9,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {}
+        setContent {
+            HomeView()
+        }
     }
 }
 
 @Composable
 fun HomeView(modifier: Modifier = Modifier) {
-    Text(text = "Hellow World!",
-    fontSize = 24.sp,
-    fontWeight = FontWeight.Bold)
+    ListView()
+}
+
+@Composable
+fun ListView(modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(10) { index ->
+            Text(text = "Item $index")
+        }
+    }
 }
