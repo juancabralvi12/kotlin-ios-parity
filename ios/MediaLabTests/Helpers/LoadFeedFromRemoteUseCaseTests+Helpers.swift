@@ -2,8 +2,8 @@
 //  Copyright © Essential Developer. All rights reserved.
 //
 
-import XCTest
-import MediaLab
+@preconcurrency import XCTest
+@testable import MediaLab
 
 extension LoadFeedFromRemoteUseCaseTests {
 	func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedImage], RemoteFeedLoader.Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {

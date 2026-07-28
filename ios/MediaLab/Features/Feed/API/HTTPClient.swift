@@ -1,9 +1,9 @@
 
 import Foundation 
 
-public protocol HTTPClient {
+protocol HTTPClient {
     typealias Result = Swift.Result<(Data, URLResponse), Error>
 
-    public func get(url: String, completion: @escaping (Result) -> Void)
+    func get(from url: URL, completion: @escaping (Result) -> Void)
 
 }

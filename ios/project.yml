@@ -36,6 +36,8 @@ targets:
     platform: iOS
     sources:
       - path: MediaLabTests
+    dependencies:
+      - target: MediaLab
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.MediaLabTests

@@ -1,7 +1,8 @@
 import Foundation
 
-struct FeedItem: Codable {
-    let id: Int
-    let title: String
-    let imageURL: String
+struct FeedImage: Equatable {
+    let id: UUID
+    let description: String?
+    let location: String?
+    let url: URL
 }

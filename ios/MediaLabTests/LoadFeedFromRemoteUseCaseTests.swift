@@ -2,9 +2,10 @@
 //  Copyright © Essential Developer. All rights reserved.
 //
 
-import XCTest
-import MediaLab
+@preconcurrency import XCTest
+@testable import MediaLab
 
+@MainActor
 class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 	//  ***********************
 	//

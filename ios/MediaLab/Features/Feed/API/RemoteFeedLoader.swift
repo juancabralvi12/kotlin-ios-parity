@@ -1,20 +1,20 @@
 import Foundation 
 
-public final class RemoteFeedLoader {
+final class RemoteFeedLoader {
     private let url: URL
     private let client: HTTPClient
 
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case connectivity
         case invalidData
     }
 
-    public init(url: URL, client: HTTPClient) {
+    init(url: URL, client: HTTPClient) {
         self.url = url
         self.client = client
     }
 
-    public func load(completion: @escaping (FeedLoader.Result) -> Void) {
+    func load(completion: @escaping (FeedLoader.Result) -> Void) {
         
     }
 }
