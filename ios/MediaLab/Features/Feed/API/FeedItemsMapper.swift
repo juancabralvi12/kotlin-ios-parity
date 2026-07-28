@@ -11,14 +11,14 @@ class FeedItemsMapper {
 
     private struct Item: Decodable {
         private let id: String
-        private let title: String
-        private let summary: String
+        private let title: String?
+        private let summary: String?
         private let imageURL: URL
 
         var item: FeedItem {
             return FeedItem(id: id,
-                             title: title,
-                             summary: summary,
+                             title: title ?? "",
+                             summary: summary ?? "",
                              url: imageURL)
         }
     }
