@@ -6,14 +6,11 @@ final class ListViewModel: ObservableObject {
     @Published private(set) var items: [FeedItem] = []
     private let loader = RemoteFeedLoader(url: URL(string: "http://localhost:8080/v1/items")!, client: URLSessionHTTPClient(session: URLSession.shared))
 
-    func load() {
-        loader.load { [weak self] result in
-            switch result {
-            case let .success(items):
-                self?.items = items
-            case let .failure(error):
-                print("Failed to load feed items: \(error)")
-            }
+    func load() async {
+        do {
+            items = try await loader.load()
+        } catch {
+            print("Failed to load feed items: \(error)")
         }
     }
 }
@@ -31,7 +28,7 @@ struct ListView: View {
             } 
         }
     }.task {
-        vm.load()
+        await vm.load()
     }
 
    }

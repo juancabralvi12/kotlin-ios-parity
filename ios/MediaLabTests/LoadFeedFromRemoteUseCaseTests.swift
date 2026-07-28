@@ -27,48 +27,48 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 		XCTAssertTrue(client.requestedURLs.isEmpty)
 	}
 
-	func test_loadTwice_requestsDataFromURLTwice() {
+	func test_loadTwice_requestsDataFromURLTwice() async {
 		let url = URL(string: "https://a-given-url.com")!
 		let (sut, client) = makeSUT(url: url)
 
-		sut.load { _ in }
-		sut.load { _ in }
+		_ = try? await sut.load()
+		_ = try? await sut.load()
 
 		XCTAssertEqual(client.requestedURLs, [url, url])
 	}
 
-	func test_load_deliversConnectivityErrorOnClientError() {
+	func test_load_deliversConnectivityErrorOnClientError() async {
 		let (sut, client) = makeSUT()
 
-		expect(sut, toCompleteWith: .failure(.connectivity), when: {
+		await expect(sut, toCompleteWith: .failure(.connectivity), when: {
 			let clientError = NSError(domain: "Test", code: 0)
 			client.complete(with: clientError)
 		})
 	}
 
-	func test_load_deliversInvalidDataErrorOnNon200HTTPResponse() {
+	func test_load_deliversInvalidDataErrorOnNon200HTTPResponse() async {
 		let (sut, client) = makeSUT()
 
 		let samples = [199, 201, 300, 400, 500]
 
-		samples.enumerated().forEach { index, code in
-			expect(sut, toCompleteWith: .failure(.invalidData), when: {
+		for code in samples {
+			await expect(sut, toCompleteWith: .failure(.invalidData), when: {
 				let json = makeItemsJSON([])
-				client.complete(withStatusCode: code, data: json, at: index)
+				client.complete(withStatusCode: code, data: json)
 			})
 		}
 	}
 
-	func test_load_deliversInvalidDataErrorOn200HTTPResponseWithInvalidJSON() {
+	func test_load_deliversInvalidDataErrorOn200HTTPResponseWithInvalidJSON() async {
 		let (sut, client) = makeSUT()
 
-		expect(sut, toCompleteWith: .failure(.invalidData), when: {
+		await expect(sut, toCompleteWith: .failure(.invalidData), when: {
 			let invalidJSON = Data("invalid json".utf8)
 			client.complete(withStatusCode: 200, data: invalidJSON)
 		})
 	}
 
-	func test_load_deliversInvalidDataErrorOn200HTTPResponseWithPartiallyValidJSONItems() {
+	func test_load_deliversInvalidDataErrorOn200HTTPResponseWithPartiallyValidJSONItems() async {
 		let (sut, client) = makeSUT()
 
 		let validItem = makeItem(
@@ -80,22 +80,22 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
 		let items = [validItem, invalidItem]
 
-		expect(sut, toCompleteWith: .failure(.invalidData), when: {
+		await expect(sut, toCompleteWith: .failure(.invalidData), when: {
 			let json = makeItemsJSON(items)
 			client.complete(withStatusCode: 200, data: json)
 		})
 	}
 
-	func test_load_deliversSuccessWithNoItemsOn200HTTPResponseWithEmptyJSONList() {
+	func test_load_deliversSuccessWithNoItemsOn200HTTPResponseWithEmptyJSONList() async {
 		let (sut, client) = makeSUT()
 
-		expect(sut, toCompleteWith: .success([]), when: {
+		await expect(sut, toCompleteWith: .success([]), when: {
 			let emptyListJSON = makeItemsJSON([])
 			client.complete(withStatusCode: 200, data: emptyListJSON)
 		})
 	}
 
-	func test_load_deliversSuccessWithItemsOn200HTTPResponseWithJSONItems() {
+	func test_load_deliversSuccessWithItemsOn200HTTPResponseWithJSONItems() async {
 		let (sut, client) = makeSUT()
 
 		let item1 = makeItem(
@@ -110,24 +110,10 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
 		let items = [item1.model, item2.model]
 
-		expect(sut, toCompleteWith: .success(items), when: {
+		await expect(sut, toCompleteWith: .success(items), when: {
 			let json = makeItemsJSON([item1.json, item2.json])
 			client.complete(withStatusCode: 200, data: json)
 		})
-	}
-
-	func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-		let url = URL(string: "http://any-url.com")!
-		let client = HTTPClientSpy()
-		var sut: RemoteFeedLoader? = RemoteFeedLoader(url: url, client: client)
-
-		var capturedResults = [RemoteFeedLoader.Result]()
-		sut?.load { capturedResults.append($0) }
-
-		sut = nil
-		client.complete(withStatusCode: 200, data: makeItemsJSON([]))
-
-		XCTAssertTrue(capturedResults.isEmpty)
 	}
 
 	// MARK: - Helpers

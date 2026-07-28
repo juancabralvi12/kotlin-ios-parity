@@ -14,16 +14,16 @@ final class RemoteFeedLoader: FeedLoader {
         self.client = client
     }
 
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        client.get(from: url) { [weak self] result in
-            guard self != nil else { return }
+    func load() async throws -> [FeedItem] {
+        let data: Data
+        let response: HTTPURLResponse
 
-            switch result {
-            case let .success((data, url)):
-                completion(FeedItemsMapper.map(data, from: url))
-            case .failure:
-                completion(.failure(Error.connectivity))
-            }
+        do {
+            (data, response) = try await client.get(from: url)
+        } catch {
+            throw Error.connectivity
         }
+
+        return try FeedItemsMapper.map(data, from: response)
     }
 }

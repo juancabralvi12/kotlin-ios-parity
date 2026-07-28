@@ -6,26 +6,24 @@
 @testable import MediaLab
 
 extension LoadFeedFromRemoteUseCaseTests {
-	func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedItem], RemoteFeedLoader.Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-		let exp = expectation(description: "Wait for load completion")
-
-		sut.load { receivedResult in
-			switch (receivedResult, expectedResult) {
-			case let (.success(receivedItems), .success(expectedItems)):
-				XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
-
-			case let (.failure(receivedError as RemoteFeedLoader.Error), .failure(expectedError)):
-				XCTAssertEqual(receivedError, expectedError, file: file, line: line)
-
-			default:
-				XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
-			}
-
-			exp.fulfill()
-		}
-
+	func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedItem], RemoteFeedLoader.Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) async {
 		action()
 
-		waitForExpectations(timeout: 0.1)
+		do {
+			let receivedItems = try await sut.load()
+
+			guard case let .success(expectedItems) = expectedResult else {
+				return XCTFail("Expected \(expectedResult), got success with \(receivedItems) instead", file: file, line: line)
+			}
+
+			XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
+		} catch {
+			guard case let .failure(expectedError) = expectedResult,
+				  let receivedError = error as? RemoteFeedLoader.Error else {
+				return XCTFail("Expected \(expectedResult), got failure with \(error) instead", file: file, line: line)
+			}
+
+			XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+		}
 	}
 }

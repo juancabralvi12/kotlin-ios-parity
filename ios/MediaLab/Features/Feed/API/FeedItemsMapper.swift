@@ -31,11 +31,11 @@ class FeedItemsMapper {
         }
     }
 
-    static func map(_ data: Data, from response: HTTPURLResponse) -> RemoteFeedLoader.Result {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [FeedItem] {
         guard response.statusCode == FeedItemsMapper.OK_200, let root = try? JSONDecoder().decode(FeedImageResponse.self, from: data) else {
-            return .failure(RemoteFeedLoader.Error.invalidData)
+            throw RemoteFeedLoader.Error.invalidData
         }
 
-        return .success(root.feed)
+        return root.feed
     }
 }
