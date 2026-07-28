@@ -1,16 +1,16 @@
 package com.example.medialab
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.medialab.viewmodel.FeedItemsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +27,14 @@ fun HomeView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ListView(modifier: Modifier = Modifier) {
+fun ListView(modifier: Modifier = Modifier, viewModel: FeedItemsViewModel = viewModel()
+) {
+    LaunchedEffect(Unit) {
+        viewModel.fetchItems()
+    }
+
     LazyColumn(modifier = modifier) {
-        items(10) { index ->
+        items(viewModel.items) { index ->
             Text(text = "Item $index")
         }
     }
